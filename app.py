@@ -67,7 +67,7 @@ if uploaded_file is not None:
     img_array = np.expand_dims(img_array, axis=0)
     img_array = img_array/255
     # Predict
-    predictions = model.predict(img_array)[0]
+    predictions = model.predict(img_array)
     top_idx = np.argmax(predictions)
     predicted_class = CLASS_NAMES[top_idx]
     confidence = predictions[top_idx]
