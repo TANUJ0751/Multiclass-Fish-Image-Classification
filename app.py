@@ -47,11 +47,14 @@ selected_model_name = st.selectbox("Choose a model for prediction:", list(MODEL_
 preprocess_input_fn = PREPROCESS_FUNCS[selected_model_name]
 
 @st.cache_resource
-def load_selected_model(model_path):
-    return tf.keras.models.load_model(
-        model_path
-    )
-model = load_selected_model(MODEL_OPTIONS[selected_model_name])
+def load_selected_model(model_path, _preprocess_fn):
+    if selected_model_name == "Custom CNN":
+        return tf.keras.models.load_model(model_path)
+    else:
+        return tf.keras.models.load_model(model_path, custom_objects={'preprocess_input': _preprocess_fn})
+    
+
+model = load_selected_model(MODEL_OPTIONS[selected_model_name],preprocess_input_fn)
 
 # === UPLOAD IMAGE ===
 uploaded_file = st.file_uploader("Upload a fish image...", type=["jpg", "jpeg", "png"])
@@ -62,10 +65,7 @@ if uploaded_file is not None:
     img_resized = img.resize(IMG_SIZE)
     img_array = image.img_to_array(img_resized)
     img_array = np.expand_dims(img_array, axis=0)
-    if selected_model_name=="Custom CNN":
-        img_array = img_array / 255.0  # Normalize
-    else:
-        img_array = preprocess_input_fn(img_array)
+    img_array = img_array/255
     # Predict
     predictions = model.predict(img_array)[0]
     top_idx = np.argmax(predictions)
