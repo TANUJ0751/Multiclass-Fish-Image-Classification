@@ -11,12 +11,12 @@ IMG_SIZE = (224, 224)
 
 # 🔸 Define available models and their paths
 MODEL_OPTIONS = {
-    "Custom CNN": "models/custom_cnn_model.h5",
-    "VGG16": "models/VGG16.h5",
-    "ResNet50": "models/ResNet50.h5",
-    "MobileNetV2": "models/MobileNetV2.h5",
-    "InceptionV3": "models/InceptionV3.h5",
-    "EfficientNetB0": "models/EfficientNetB0.h5"
+    "Custom CNN": "./models/custom_cnn_model.h5",
+    "VGG16": "./models/VGG16.h5",
+    "ResNet50": "./models/ResNet50.h5",
+    "MobileNetV2": "./models/MobileNetV2.h5",
+    "InceptionV3": "./models/InceptionV3.h5",
+    "EfficientNetB0": "./models/EfficientNetB0.h5"
 }
 
 CLASS_NAMES = sorted(os.listdir("./data/train"))
