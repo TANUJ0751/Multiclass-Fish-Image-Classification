@@ -31,7 +31,7 @@ selected_model_name = st.selectbox("Choose a model for prediction:", list(MODEL_
 
 @st.cache_resource
 def load_selected_model(model_path):
-    return tf.keras.models.load_model(MODEL_PATH)
+    return tf.keras.models.load_model(model_path)
 
 model = load_selected_model(MODEL_OPTIONS[selected_model_name])
 
