@@ -18,7 +18,21 @@ MODEL_OPTIONS = {
     "InceptionV3": "./models/InceptionV3.h5",
     "EfficientNetB0": "./models/EfficientNetB0.h5"
 }
+# 🔸 Define corresponding preprocess_input functions
+from tensorflow.keras.applications.vgg16 import preprocess_input as vgg16_preprocess
+from tensorflow.keras.applications.resnet50 import preprocess_input as resnet50_preprocess
+from tensorflow.keras.applications.mobilenet_v2 import preprocess_input as mobilenetv2_preprocess
+from tensorflow.keras.applications.inception_v3 import preprocess_input as inceptionv3_preprocess
+from tensorflow.keras.applications.efficientnet import preprocess_input as efficientnetb0_preprocess
 
+PREPROCESS_FUNCS = {
+    "Custom CNN": lambda x: x / 255.0,  # Normalization for custom CNN
+    "VGG16": vgg16_preprocess,
+    "ResNet50": resnet50_preprocess,
+    "MobileNetV2": mobilenetv2_preprocess,
+    "InceptionV3": inceptionv3_preprocess,
+    "EfficientNetB0": efficientnetb0_preprocess
+}
 CLASS_NAMES = sorted(os.listdir("./data/train"))
 
 # === STREAMLIT PAGE CONFIG ===
@@ -29,9 +43,13 @@ st.markdown("Upload a fish image and select a model to predict the species.")
 # === MODEL SELECTION ===
 selected_model_name = st.selectbox("Choose a model for prediction:", list(MODEL_OPTIONS.keys()))
 
+# === Select preprocess function based on model ===
+preprocess_input_fn = PREPROCESS_FUNCS[selected_model_name]
+
 @st.cache_resource
-def load_selected_model(model_path):
-    return tf.keras.models.load_model(model_path)
+def load_selected_model(model_path,preprocess_fn):
+    
+    return tf.keras.models.load_model(model_path,custom_objects={"preprocess_input": preprocess_fn})
 
 model = load_selected_model(MODEL_OPTIONS[selected_model_name])
 
