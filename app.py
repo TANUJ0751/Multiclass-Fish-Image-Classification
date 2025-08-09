@@ -47,7 +47,7 @@ selected_model_name = st.selectbox("Choose a model for prediction:", list(MODEL_
 preprocess_input_fn = PREPROCESS_FUNCS[selected_model_name]
 
 @st.cache_resource
-def load_selected_model(model_path, _preprocess_fn):
+def load_selected_model(model_path):
     return tf.keras.models.load_model(
         model_path
     )
@@ -62,8 +62,10 @@ if uploaded_file is not None:
     img_resized = img.resize(IMG_SIZE)
     img_array = image.img_to_array(img_resized)
     img_array = np.expand_dims(img_array, axis=0)
-    img_array = img_array / 255.0  # Normalize
-
+    if selected_model_name=="Custom CNN":
+        img_array = img_array / 255.0  # Normalize
+    else:
+        img_array = preprocess_input_fn(img_array)
     # Predict
     predictions = model.predict(img_array)[0]
     top_idx = np.argmax(predictions)
