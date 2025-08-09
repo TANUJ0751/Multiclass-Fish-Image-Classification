@@ -55,6 +55,9 @@ def load_selected_model(model_path, _preprocess_fn):
     
 
 model = load_selected_model(MODEL_OPTIONS[selected_model_name],preprocess_input_fn)
+st.text("Model input(s):")
+for input_tensor in model.inputs:
+    st.text(f"Name: {input_tensor.name}, Shape: {input_tensor.shape}, Dtype: {input_tensor.dtype}")
 
 # === UPLOAD IMAGE ===
 uploaded_file = st.file_uploader("Upload a fish image...", type=["jpg", "jpeg", "png"])
@@ -65,9 +68,12 @@ if uploaded_file is not None:
     img_resized = img.resize(IMG_SIZE)
     img_array = image.img_to_array(img_resized)
     img_array = np.expand_dims(img_array, axis=0)
-    img_array = img_array/255
+    if selected_model_name=="Custom CNN":
+        img_array = img_array / 255.0
+    else:
+        img_array = preprocess_input_fn(img_array)
     # Predict
-    predictions = model.predict(img_array)
+    predictions = model.predict(img_array)[0]
     top_idx = np.argmax(predictions)
     predicted_class = CLASS_NAMES[top_idx]
     confidence = predictions[top_idx]
