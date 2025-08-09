@@ -51,7 +51,7 @@ def load_selected_model(model_path,preprocess_fn):
     
     return tf.keras.models.load_model(model_path,custom_objects={"preprocess_input": preprocess_fn})
 
-model = load_selected_model(MODEL_OPTIONS[selected_model_name])
+model = load_selected_model(MODEL_OPTIONS[selected_model_name],preprocess_input_fn)
 
 # === UPLOAD IMAGE ===
 uploaded_file = st.file_uploader("Upload a fish image...", type=["jpg", "jpeg", "png"])
