@@ -1,6 +1,6 @@
 import streamlit as st
 import numpy as np
-from tensorflow.keras.models import load_model
+import tensorflow as tf
 from tensorflow.keras.preprocessing import image
 from PIL import Image
 import pandas as pd
@@ -31,7 +31,7 @@ selected_model_name = st.selectbox("Choose a model for prediction:", list(MODEL_
 
 @st.cache_resource
 def load_selected_model(model_path):
-    return load_model(model_path)
+    return tf.keras.models.load_model(MODEL_PATH)
 
 model = load_selected_model(MODEL_OPTIONS[selected_model_name])
 
