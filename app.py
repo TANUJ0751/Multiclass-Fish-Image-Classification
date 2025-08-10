@@ -15,8 +15,7 @@ MODEL_OPTIONS = {
     "VGG16": "./models/VGG16.h5",
     "ResNet50": "./models/ResNet50.h5",
     "MobileNetV2": "./models/MobileNetV2.h5",
-    "InceptionV3": "./models/InceptionV3.h5",
-    "EfficientNetB0": "./models/EfficientNetB0.h5"
+    "InceptionV3": "./models/InceptionV3.h5"
 }
 # 🔸 Define corresponding preprocess_input functions
 from tensorflow.keras.applications.vgg16 import preprocess_input as vgg16_preprocess
